@@ -60,10 +60,6 @@ sphinx = "~=3.4.2"
 sphinx_rtd_theme = "*"
 tox = "*"
 
-[[tool.poetry.source]]
-name = "piwheels"
-url = "https://www.piwheels.org/simple"
-
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
