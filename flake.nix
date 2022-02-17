@@ -1,35 +1,70 @@
 {
+  description = "Flake for paperless-ngx";
+
   inputs = {
-    mach-nix.url = "mach-nix/c914064c9b8cab9495818ffe8d834d8c2c1d7ce7";
+    nixpkgs = { url = "github:nixos/nixpkgs/nixpkgs-unstable"; };
+    flake-utils = { url = "github:numtide/flake-utils"; };
   };
 
-  outputs = { self, nixpkgs, mach-nix }@inp:
-    let
+  outputs = { self, nixpkgs, flake-utils, ... }:
+    flake-utils.lib.eachDefaultSystem (system:
+      let
+        pkgs = import nixpkgs { inherit system; };
 
-      l = nixpkgs.lib // builtins;
-      supportedSystems = [ "x86_64-linux" ];
-      forAllSystems = f: l.genAttrs supportedSystems
-        (system: f system (import nixpkgs { inherit system; }));
-    in
-    {
-      # enter this python environment by executing `nix shell .`
-      defaultPackage = forAllSystems (system: pkgs: mach-nix.lib."${system}".mkPython {
-        requirements = builtins.readFile ./requirements.txt;
-        python = "python39";
-        #_.numpy.buildInputs.add = [ mach-nix.nixpkgs.cython ];
-        _.psyycopcg2.buildInputs.add = [ nixpkgs.postgresql ];
-        providers = {
-          _default = "nixpkgs,sdist";
-          lxml = "sdist";
-          psyycopcg2 = "nixpkgs";
+        python = pkgs.python39;
+        projectDir = ./.;
+        overrides = pkgs.poetry2nix.overrides.withDefaults (self: super: {
+          threadpoolctl = super.threadpoolctl.overrideAttrs (old: {
+            format = "flit";
+          });
+        });
+
+        packageName = "paperless-ngx";
+      in
+      {
+
+        packages.${packageName} = pkgs.poetry2nix.mkPoetryApplication {
+          inherit python projectDir;
+          # Non-Python runtime dependencies go here
+          overrides = [
+            pkgs.poetry2nix.defaultPoetryOverrides
+            (self: super: {
+              pikepdf = super.pikepdf.overrideAttrs (old: {
+                nativeBuildInputs = old.nativeBuildInputs ++ [ self.setuptools-scm-git-archive self.pybind11 ];
+                buildInputs = old.buildInputs ++ [ self.pybind11 self.setuptools-scm-git-archive pkgs.qpdf ];
+              });
+            })
+            (self: super: {
+              threadpoolctl = super.threadpoolctl.overrideAttrs (old: {
+                format = "other";
+                buildPhase = ''
+                  runHook preBuild
+                  ${python}/bin/python -m flit build --format wheel
+                  runHook postBuild
+                '';
+                installPhase = ''
+                  ${self.pip}/bin/pip install dist/*.whl --prefix $out
+                '';
+                nativeBuildInputs = [ self.flit self.flit-core self.wrapPython ];
+                #buildInputs = [ self.flit ];
+              });
+            })
+          ];
+          propogatedBuildInputs = [ pkgs.python3Packages.setuptools-scm-git-archive ];
+          buildInputs = [ pkgs.python3Packages.pybind11 ];
         };
-        #overridesPost = [
-        # (self: super: {
-        #   numpy = super.numpy.overrideAttrs (attrs: {
-        #    nativeBuildInputs = attrs.nativeBuildInputs ++ [ mach-nix.cython ];
-        #  });
-        #})
-        #];
+
+        defaultPackage = self.packages.${system}.${packageName};
+
+        devShell = pkgs.mkShell
+          {
+            buildInputs = [
+              (pkgs.poetry2nix.mkPoetryEnv {
+                inherit python projectDir overrides;
+              })
+              pkgs.python39Packages.poetry
+            ];
+          };
+
       });
-    };
 }
