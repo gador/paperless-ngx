@@ -40,21 +40,37 @@ let
           sha256 = "0fi7jd5hlx8cnv1m97kv9hc4ih4l8v15wzkqwsp73is4n0qazy0m";
         };
       });
+      # wait for https://github.com/NixOS/nixpkgs/pull/165382
+      ocrmypdf = super.ocrmypdf.overridePythonAttrs (oldAttrs: rec {
+        postPatch = ''
+          # https://github.com/ocrmypdf/OCRmyPDF/issues/933
+          substituteInPlace setup.cfg \
+            --replace "pdfminer.six!=20200720,>=20191110,<=20211012" "pdfminer.six"
+        '';
+      });
+      pdfminer_six = super.pdfminer_six.overridePythonAttrs (oldAttrs: rec {
+        version = "20220319";
+        postPatch = ''
+          # Verion is not stored in repo, gets added by a GitHub action after tag is created
+          # https://github.com/pdfminer/pdfminer.six/pull/727
+          substituteInPlace pdfminer/__init__.py --replace "__VERSION__" ${version}
+        '';
+      });
+
     };
   };
-
   path = lib.makeBinPath [ ghostscript imagemagick jbig2enc optipng pngquant qpdf tesseract4 unpaper ];
 in
 py.pkgs.pythonPackages.buildPythonApplication rec {
-  pname = "paperless-ng";
-  version = "1.5.1";
+  pname = "paperless-ngx";
+  version = "1.6.1wip";
 
   src = ./.;
   format = "other";
 
   # Make bind address configurable
   postPatch = ''
-    substituteInPlace gunicorn.conf.py --replace "bind = '0.0.0.0:8000'" ""
+    substituteInPlace gunicorn.conf.py --replace "bind = f'0.0.0.0:{os.getenv(\"PAPERLESS_PORT\", 8000)}'" ""
   '';
 
   propagatedBuildInputs = with py.pkgs.pythonPackages; [
@@ -149,6 +165,8 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
     whitenoise
     whoosh
     zope_interface
+    pyzbar
+		pdf2image
   ];
 
   doCheck = true;
@@ -174,9 +192,9 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
 
   installPhase = ''
     mkdir -p $out/lib
-    cp -r . $out/lib/paperless-ng
-    chmod +x $out/lib/paperless-ng/src/manage.py
-    makeWrapper $out/lib/paperless-ng/src/manage.py $out/bin/paperless-ng \
+    cp -r . $out/lib/paperless-ngx
+    chmod +x $out/lib/paperless-ngx/src/manage.py
+    makeWrapper $out/lib/paperless-ngx/src/manage.py $out/bin/paperless-ngx \
       --prefix PYTHONPATH : "$PYTHONPATH" \
       --prefix PATH : "${path}"
   '';
