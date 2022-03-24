@@ -11,6 +11,7 @@
 , tesseract4
 , unpaper
 , liberation_ttf
+, poppler_utils
 }:
 
 let
@@ -59,7 +60,7 @@ let
 
     };
   };
-  path = lib.makeBinPath [ ghostscript imagemagick jbig2enc optipng pngquant qpdf tesseract4 unpaper ];
+  path = lib.makeBinPath [ ghostscript imagemagick jbig2enc optipng pngquant qpdf tesseract4 unpaper poppler_utils ];
 in
 py.pkgs.pythonPackages.buildPythonApplication rec {
   pname = "paperless-ngx";
