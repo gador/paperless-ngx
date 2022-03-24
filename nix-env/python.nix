@@ -10,12 +10,13 @@ let
       		# version of cryptography is too recent
       		# nixpkgs is needed for setuptools and still behind the current version
       		substitute ${reqFile} $out \
-      			--replace "-i https://pypi.python.org/simple" "" \
-      			--replace "--extra-index-url https://www.piwheels.org/simple" "" \
+      			--replace "-i https://pypi.python.org/simple/" "" \
+      			--replace "--extra-index-url https://www.piwheels.org/simple/" "" \
       			--replace "cryptography==36.0.1" "cryptography>=36" \
       			--replace "setuptools==60.9.3" "setuptools>=57" \
       			--replace "python-magic==0.4.25" "python-magic" \
-      			--replace "ocrmypdf==13.4.0" "ocrmypdf>=13.4"
+      			--replace "ocrmypdf==13.4.1" "ocrmypdf>=13.4" \
+						--replace "pdfminer.six==20220319" "pdfminer.six"
       		echo "pytest" >> $out
       		echo "pytest-cov" >> $out
           echo "pytest-django" >> $out
