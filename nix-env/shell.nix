@@ -15,5 +15,7 @@ pkgs.mkShell {
 		pkgs.qpdf
 		pkgs.tesseract4
 		pkgs.unpaper
+		pkgs.poppler_utils
+		pkgs.black
   ];
 }
