@@ -1,2 +1,2 @@
-{ pkgs ? import /home/florian/software/git/nixpkgs { } }:
+{ pkgs ? import <nixpkgs> { } }:
 pkgs.callPackage ./derivation.nix { }
