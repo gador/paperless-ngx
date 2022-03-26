@@ -8,23 +8,28 @@ let
     ''
       		# comment the index urls at the top of the file, since mach-nix can't handle them
       		# version of cryptography is too recent
-      		# nixpkgs is needed for setuptools and still behind the current version
+      		# relax version constrains, so they work with nixpkgs
+					# which is sometimes necessary for dependencies to work
       		substitute ${reqFile} $out \
       			--replace "-i https://pypi.python.org/simple/" "" \
       			--replace "--extra-index-url https://www.piwheels.org/simple/" "" \
       			--replace "cryptography==36.0.1" "cryptography>=36" \
       			--replace "setuptools==60.9.3" "setuptools>=57" \
       			--replace "python-magic==0.4.25" "python-magic" \
-      			--replace "ocrmypdf==13.4.1" "ocrmypdf>=13.4" \
-						--replace "pdfminer.six==20220319" "pdfminer.six"
-      		echo "pytest" >> $out
+      			--replace "ocrmypdf==13.4.1" "ocrmypdf>=13.4"
+					# add packages required by pytest
+					echo "pytest" >> $out
       		echo "pytest-cov" >> $out
           echo "pytest-django" >> $out
           echo "pytest-env" >> $out
           echo "pytest-sugar" >> $out
           echo "pytest-xdist" >> $out
           echo "factory_boy" >> $out
-          echo "black" >> $out
+          # add additional useful python packages to the shell
+					echo "black" >> $out
+					echo "reorder-python-imports" >> $out
+          echo "add-trailing-comma" >> $out
+          echo "flake8" >> $out
     '');
 in
 mach-nix.mkPython {
@@ -32,9 +37,4 @@ mach-nix.mkPython {
   providers.pyzbar = "nixpkgs";
   providers.python-magic = "nixpkgs";
   providers.ocrmypdf = "nixpkgs";
-  #packagesExtra = [
-  #   "https://github.com/NaturalHistoryMuseum/pyzbar/archive/refs/tags/v0.1.9.tar.gz"
-  #];
-  # #providers.pyzbar = "sdist"
-  # _.pyzbar.buildInputs.add = [ pkgs.zbar ];
 }
