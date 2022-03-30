@@ -1,9 +1,9 @@
 [mach-nix]
 ref = "master"
-rev = "c914064c9b8cab9495818ffe8d834d8c2c1d7ce7"
-sha256 = "1l6x03r4vk1rsgjn87pp9izxr8nki4snmkhyr12cfl532mrm6kx1"
+rev = "86c3111786742fcc4dfdca2e124bcea10e05a4e6"
+sha256 = "0agjabrkkbl3nd6rqi9fhslqprfvvf4qsjys926c3mi1z3hdydd4"
 
 [nixpkgs]
-ref = "f4998c542d68a8a6e3d345d5c106e5915f430a16"
-rev = "f4998c542d68a8a6e3d345d5c106e5915f430a16"
-sha256 = "1n3lvkch5yr8yxjhammc1ckrlkq9qqmspp2h3y4ikxwviqx4hwq8"
+ref = "05a7d70e09b0634bb64c9401b2cdc23f22778c00"
+rev = "05a7d70e09b0634bb64c9401b2cdc23f22778c00"
+sha256 = "0d57ms91i69i3fdvccs5h77cw9gbdahyn9b6sy10v3n9mv1v8qab"

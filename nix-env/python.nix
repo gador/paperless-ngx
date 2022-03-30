@@ -11,10 +11,10 @@ let
       		# relax version constrains, so they work with nixpkgs
 					# which is sometimes necessary for dependencies to work
       		substitute ${reqFile} $out \
-      			--replace "-i https://pypi.python.org/simple/" "" \
-      			--replace "--extra-index-url https://www.piwheels.org/simple/" "" \
-      			--replace "cryptography==36.0.1" "cryptography>=36" \
-      			--replace "setuptools==60.9.3" "setuptools>=57" \
+      			--replace "-i https://pypi.python.org/simple" "" \
+      			--replace "--extra-index-url https://www.piwheels.org/simple" "" \
+      			--replace "cryptography==36.0.2" "cryptography>=36" \
+      			--replace "setuptools==60.10.0" "setuptools>=57" \
       			--replace "python-magic==0.4.25" "python-magic" \
       			--replace "ocrmypdf==13.4.1" "ocrmypdf>=13.4"
 					# add packages required by pytest
@@ -30,6 +30,7 @@ let
 					echo "reorder-python-imports" >> $out
           echo "add-trailing-comma" >> $out
           echo "flake8" >> $out
+          echo "pycodestyle" >> $out
     '');
 in
 mach-nix.mkPython {
