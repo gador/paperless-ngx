@@ -17,31 +17,26 @@
 let
   py = python3.override {
     packageOverrides = self: super: {
-      django = super.django_3;
-      django-picklefield = super.django-picklefield.overrideAttrs (oldAttrs: {
-        # Checks do not pass with django 3
-        doInstallCheck = false;
-      });
-      # Avoid warning in django-q versions > 1.3.4
-      # https://github.com/jonaswinkler/paperless-ng/issues/857
-      # https://github.com/Koed00/django-q/issues/526
-      django-q = super.django-q.overridePythonAttrs (oldAttrs: rec {
-        version = "1.3.4";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "Uj1U3PG2YVLBtlj5FPAO07UYo0MqnezUiYc4yo274Q8=";
-        };
+      django = super.django_4;
+
+      # necessary for campatibility with django4
+      # waiting on upstream https://github.com/django-extensions/django-extensions/pull/1698
+      django-extensions = super.django-extensions.overridePythonAttrs (oldAttrs: rec {
+        disabledTestPaths = oldAttrs.disabledTestPaths ++ [
+
+          "tests/management/commands/test_pipchecker.py"
+          "tests/management/commands/test_show_urls.py"
+          "tests/test_admin_widgets.py"
+          "tests/test_dumpscript.py"
+          "tests/test_management_command.py"
+          "tests/management/commands/test_show_template_tags.py"
+          "tests/management/commands/shell_plus_tests/test_import_subclasses.py"
+          "tests/management/test_email_notifications.py"
+          "tests/test_runscript.py"
+          "tests/auth/test_mixins.py"
+        ];
       });
 
-      # Incompatible with aioredis 2
-      aioredis = super.aioredis.overridePythonAttrs (oldAttrs: rec {
-        version = "1.3.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "0fi7jd5hlx8cnv1m97kv9hc4ih4l8v15wzkqwsp73is4n0qazy0m";
-        };
-      });
-      # wait for https://github.com/NixOS/nixpkgs/pull/165382
       ocrmypdf = super.ocrmypdf.overridePythonAttrs (oldAttrs: rec {
         postPatch = ''
           # https://github.com/ocrmypdf/OCRmyPDF/issues/933
@@ -167,7 +162,7 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
     whoosh
     zope_interface
     pyzbar
-		pdf2image
+    pdf2image
   ];
 
   doCheck = true;
