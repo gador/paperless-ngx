@@ -37,6 +37,14 @@ let
         ];
       });
 
+      # need older version
+      aioredis = super.aioredis.overridePythonAttrs (oldAttrs: rec {
+        src = oldAttrs.src.override {
+          version = "1.3.1";
+          sha256 = "FfivMLBEx3Gu5nh+XsJGlMBIGEx7nlTDtgx1CkuTJzo=";
+        };
+
+      });
       ocrmypdf = super.ocrmypdf.overridePythonAttrs (oldAttrs: rec {
         postPatch = ''
           # https://github.com/ocrmypdf/OCRmyPDF/issues/933
