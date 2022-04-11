@@ -14,7 +14,7 @@ in rec {
   }) {
     python = "python39";
     inherit pkgs;
-		 pypiDataRev = "9cbdfbb16a252f81d9754877d65010f214f110e3";
-     pypiDataSha256 = "sha256:0x345p1hj96l0wn8xlp6vbzckmp8l0m03hjfcwsxmg3c43g8xclk";
+		 pypiDataRev = "c62c16dea41a1e8169826ac73d1522f3233d92a5";
+     pypiDataSha256 = "1igf4iw06fcnrcj1p2zvk2wh9b49df650i8akzj5549ydf8gdzaz";
   };
 }
