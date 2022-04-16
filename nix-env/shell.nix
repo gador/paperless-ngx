@@ -17,5 +17,6 @@ pkgs.mkShell {
 		pkgs.unpaper
 		pkgs.poppler_utils
 		pkgs.black
+		pkgs.zlib
   ];
 }
