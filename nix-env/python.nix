@@ -11,17 +11,18 @@ let
             		# relax version constrains, so they work with nixpkgs
       					# which is sometimes necessary for dependencies to work
             		substitute ${reqFile} $out \
-            			--replace "-i https://pypi.python.org/simple/" "" \
-            			--replace "--extra-index-url https://www.piwheels.org/simple/" "" \
-            			--replace "cryptography==36.0.2" "cryptography>=36" \
+            			--replace "-i https://pypi.python.org/simple" "" \
+            			--replace "--extra-index-url https://www.piwheels.org/simple" "" \
+            			--replace "cryptography==37.0.1" "cryptography>=36" \
             			--replace "setuptools==62.1.0" "setuptools>=57" \
             			--replace "python-magic==0.4.25" "python-magic" \
-            			--replace "ocrmypdf==13.4.2" "ocrmypdf>=13.4" \
+            			--replace "ocrmypdf==13.4.3" "ocrmypdf>=13.4" \
                   --replace "pdfminer.six==20220319" "pdfminer.six" \
                   --replace "img2pdf==0.4.4" "img2pdf>=0.4.3" \
                   --replace "pillow==9.1.0" "pillow>=9.0" \
                   --replace "django==4.0.4" "django>=4.0" \
-                  --replace "twisted[tls]==22.4.0" "twisted[tls]>=22.0"
+                  --replace "twisted[tls]==22.4.0" "twisted[tls]>=22.0" \
+                  --replace "pikepdf==5.1.2" "pikepdf>=5.0" \
       					# add packages required by pytest
       					echo "pytest" >> $out
             		echo "pytest-cov" >> $out
