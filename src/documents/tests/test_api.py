@@ -1428,9 +1428,6 @@ class TestDocumentApiV2(DirectoriesMixin, APITestCase):
 
         response = self.client.get("/api/ui_settings/", format="json")
 
-        print(response)
-        print(response.data)
-
         self.assertEqual(response.status_code, 200)
         self.assertDictEqual(
             response.data["settings"],
