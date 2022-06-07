@@ -92,3 +92,6 @@ scripts/nuke
 
 # mac os
 .DS_Store
+
+# direnv integration
+.direnv 

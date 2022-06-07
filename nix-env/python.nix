@@ -13,13 +13,13 @@ let
             		substitute ${reqFile} $out \
             			--replace "-i https://pypi.python.org/simple" "" \
             			--replace "--extra-index-url https://www.piwheels.org/simple" "" \
-            			--replace "cryptography==37.0.1" "cryptography>=36" \
-            			--replace "setuptools==62.1.0" "setuptools>=57" \
+            			--replace "cryptography==36.0.2" "cryptography>=36" \
+            			--replace "setuptools==62.3.2" "setuptools>=61" \
             			--replace "python-magic==0.4.25" "python-magic" \
-            			--replace "ocrmypdf==13.4.3" "ocrmypdf>=13.4" \
+            			--replace "ocrmypdf==13.4.4" "ocrmypdf>=13.4" \
                   --replace "pdfminer.six==20220319" "pdfminer.six" \
                   --replace "img2pdf==0.4.4" "img2pdf>=0.4.3" \
-                  --replace "pillow==9.1.0" "pillow>=9.0" \
+                  --replace "pillow==9.1.1" "pillow>=9.0" \
                   --replace "django==4.0.4" "django>=4.0" \
                   --replace "twisted[tls]==22.4.0" "twisted[tls]>=22.0" \
                   --replace "pikepdf==5.1.2" "pikepdf>=5.0" \
@@ -49,6 +49,8 @@ mach-nix.mkPython {
   providers.pillow = "nixpkgs";
   providers.pikepdf = "nixpkgs";
   providers.img2pdf = "nixpkgs";
+	providers.psycopg2 = "nixpkgs";
   _.pikepdf.buildInputs.add = [ pkgs.python3Packages.pybind11 ];
   _.numpy.buildInputs.add = [ pkgs.zlib ];
+	_.psycopg2.buildInputs.add = [pkgs.python3Packages.sphinx-better-theme];
 }
