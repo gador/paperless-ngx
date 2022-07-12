@@ -26,7 +26,7 @@ jobs:
         run: pipx install pipenv
       -
         name: Set up Python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: 3.9
           cache: "pipenv"
@@ -73,7 +73,7 @@ jobs:
         uses: actions/checkout@v3
       -
         name: Set up Python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: "3.9"
       -
@@ -135,18 +135,24 @@ jobs:
       -
         name: Check pushing to Docker Hub
         id: docker-hub
-        # Only push to Dockerhub from the main repo
+        # Only push to Dockerhub from the main repo AND the ref is either:
+        #  main
+        #  dev
+        #  beta
+        #  a tag
         # Otherwise forks would require a Docker Hub account and secrets setup
         run: |
-          if [[ ${{ github.repository }} == "paperless-ngx/paperless-ngx" ]] ; then
+          if [[ ${{ github.repository }} == "paperless-ngx/paperless-ngx" && ( ${{ github.ref_name }} == "main" || ${{ github.ref_name }} == "dev" || ${{ github.ref_name }} == "beta" || ${{ startsWith(github.ref, 'refs/tags/v') }} == "true" ) ]] ; then
+            echo "Enabling DockerHub image push"
             echo ::set-output name=enable::"true"
           else
+            echo "Not pushing to DockerHub"
             echo ::set-output name=enable::"false"
           fi
       -
         name: Gather Docker metadata
         id: docker-meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v4
         with:
           images: |
             ghcr.io/${{ github.repository }}
@@ -231,7 +237,7 @@ jobs:
         uses: actions/checkout@v3
       -
         name: Set up Python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: 3.9
       -

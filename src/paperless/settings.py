@@ -425,27 +425,7 @@ LOGGING = {
 # Task queue                                                                  #
 ###############################################################################
 
-
-# Sensible defaults for multitasking:
-# use a fair balance between worker processes and threads epr worker so that
-# both consuming many documents in parallel and consuming large documents is
-# reasonably fast.
-# Favors threads per worker on smaller systems and never exceeds cpu_count()
-# in total.
-
-
-def default_task_workers() -> int:
-    # always leave one core open
-    available_cores = max(multiprocessing.cpu_count(), 1)
-    try:
-        if available_cores < 4:
-            return available_cores
-        return max(math.floor(math.sqrt(available_cores)), 1)
-    except NotImplementedError:
-        return 1
-
-
-TASK_WORKERS = __get_int("PAPERLESS_TASK_WORKERS", default_task_workers())
+TASK_WORKERS = __get_int("PAPERLESS_TASK_WORKERS", 1)
 
 PAPERLESS_WORKER_TIMEOUT: Final[int] = __get_int("PAPERLESS_WORKER_TIMEOUT", 1800)
 
@@ -526,8 +506,6 @@ CONSUMER_BARCODE_TIFF_SUPPORT = __get_boolean(
 
 CONSUMER_BARCODE_STRING = os.getenv("PAPERLESS_CONSUMER_BARCODE_STRING", "PATCHT")
 
-OPTIMIZE_THUMBNAILS = __get_boolean("PAPERLESS_OPTIMIZE_THUMBNAILS", "true")
-
 OCR_PAGES = int(os.getenv("PAPERLESS_OCR_PAGES", 0))
 
 # The default language that tesseract will attempt to use when parsing
@@ -569,8 +547,6 @@ CONVERT_TMPDIR = os.getenv("PAPERLESS_CONVERT_TMPDIR")
 CONVERT_MEMORY_LIMIT = os.getenv("PAPERLESS_CONVERT_MEMORY_LIMIT")
 
 GS_BINARY = os.getenv("PAPERLESS_GS_BINARY", "gs")
-
-OPTIPNG_BINARY = os.getenv("PAPERLESS_OPTIPNG_BINARY", "optipng")
 
 
 # Pre-2.x versions of Paperless stored your documents locally with GPG

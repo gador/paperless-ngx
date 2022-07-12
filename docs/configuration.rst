@@ -536,6 +536,8 @@ PAPERLESS_TASK_WORKERS=<num>
     maintain the automatic matching algorithm, check emails, consume documents,
     etc. This variable specifies how many things it will do in parallel.
 
+    Defaults to 1
+
 
 PAPERLESS_THREADS_PER_WORKER=<num>
     Furthermore, paperless uses multiple threads when consuming documents to
@@ -712,13 +714,6 @@ PAPERLESS_CONVERT_TMPDIR=<path>
 
     Default is none, which disables the temporary directory.
 
-PAPERLESS_OPTIMIZE_THUMBNAILS=<bool>
-    Use optipng to optimize thumbnails. This usually reduces the size of
-    thumbnails by about 20%, but uses considerable compute time during
-    consumption.
-
-    Defaults to true.
-
 PAPERLESS_POST_CONSUME_SCRIPT=<filename>
     After a document is consumed, Paperless can trigger an arbitrary script if
     you like.  This script will be passed a number of arguments for you to work
@@ -789,9 +784,6 @@ PAPERLESS_CONVERT_BINARY=<path>
 PAPERLESS_GS_BINARY=<path>
     Defaults to "/usr/bin/gs".
 
-PAPERLESS_OPTIPNG_BINARY=<path>
-    Defaults to "/usr/bin/optipng".
-
 
 .. _configuration-docker:
 
@@ -807,9 +799,7 @@ PAPERLESS_WEBSERVER_WORKERS=<num>
     also loads the entire application into memory separately, so increasing this value
     will increase RAM usage.
 
-    Consider configuring this to 1 on low power devices with limited amount of RAM.
-
-    Defaults to 2.
+    Defaults to 1.
 
 PAPERLESS_PORT=<port>
     The port number the webserver will listen on inside the container. There are
