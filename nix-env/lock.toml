@@ -5,5 +5,5 @@ sha256 = "185qf6d5xg8qk1hb1y0b5gggr71vdz8v9d5ga4zg7dmcb1aypxcg"
 
 [nixpkgs]
 ref = "master"
-rev = "cb26845685076ac02be9b9972a712d500fec9384"
-sha256 = "1gcmwcskiyki0qy72pfawl3qmgpqp3i0f25d1mpb8qdsq847ygnp"
+rev = "5f43d8b088d3771274bcfb69d3c7435b1121ac88"
+sha256 = "1fh5inlikm3090l0n14g8byiz7vzhna377pkvv2a7armwl1gs8ql"
