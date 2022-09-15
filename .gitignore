@@ -93,3 +93,5 @@ scripts/nuke
 
 # mac os
 .DS_Store
+
+.direnv
