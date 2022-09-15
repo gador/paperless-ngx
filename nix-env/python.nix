@@ -58,6 +58,7 @@ mach-nix.mkPython {
   providers.img2pdf = "nixpkgs";
 	providers.psycopg2 = "nixpkgs";
 	providers.black = "nixpkgs";
+	providers.django = "nixpkgs";
 	providers.sphinx-better-theme = "nixpkgs";
   _.numpy.buildInputs.add = [ pkgs.zlib ];
 }
