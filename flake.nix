@@ -16,9 +16,9 @@
         name = "pipzone";
         targetPkgs = pkgs:
           (with pkgs; [
-            python39
-            python39Packages.pip
-            python39Packages.virtualenv
+            python310
+            python310Packages.pip
+            python310Packages.virtualenv
             pipenv
             optipng
             ghostscript
@@ -43,9 +43,9 @@
 					python -m venv ${venv}
 					source ${venv}/bin/activate
 					pipenv install --dev
-					patch ${venv}/lib/python3.9/site-packages/magic/loader.py ${patch} || echo "patch could not be applied"
+					patch ${venv}/lib/python3.10/site-packages/magic/loader.py ${patch} || echo "patch could not be applied"
 					sed -i -e "s|find_library('zbar')|\"${pkgs.lib.getLib pkgs.zbar}/lib/libzbar${pkgs.stdenv.hostPlatform.extensions.sharedLibrary}\"|" \
-					  ${venv}/lib/python3.9/site-packages/pyzbar/zbar_library.py
+					  ${venv}/lib/python3.10/site-packages/pyzbar/zbar_library.py
 				else
 					source ${venv}/bin/activate
 				fi
